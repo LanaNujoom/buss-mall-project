@@ -13,7 +13,7 @@ var productSection = document.getElementById('products');
 var trialsleft = 25;
 var productsCanvas = document.getElementById('productsShart').getContext('2d');
 var shownImages = [];
-
+var clear = document.getElementById('clearLocalStorage');
 
 
 
@@ -27,8 +27,30 @@ function Product(name, image) {
     arrayProducts.push(this);
 }
 
+function storeProducts(){
+
+    localStorage.setItem('ourProducts', JSON.stringify(arrayProducts));
+}
+
+function clearLocalStorage() {
+
+    localStorage.clear();
+
+    arrayProducts = [];
+
+    renderChart();
+}
 
 
+function checkAndRestore() {
+
+    if (localStorage.length > 0) { 
+        arrayProducts = JSON.parse(localStorage.getItem('ourProducts')); 
+      
+
+    }
+
+}
 
 
 
@@ -47,9 +69,6 @@ function renderMallPicst(leftImage, midImage, rightImage) {
 
 
 }
-
-
-
 
 function renderChart() {
 
@@ -205,6 +224,11 @@ function checkAvailability(selectedProductName) {
 
 
 
+
+
+
+
+
 function pickImage() {
 
     
@@ -222,15 +246,15 @@ function pickImage() {
         var rightImage = Math.round(Math.random() * (arrayProducts.length - 1));
         var rightproductImageName = arrayProducts[rightImage].name;
 
-    } while (  leftImage === rightImage ||  checkAvailability(rightproductImageName));
+    } while ( leftImage === rightImage ||  checkAvailability(rightproductImageName));
 
 
     do {
-       
+        
         var midImage = Math.round(Math.random() * (arrayProducts.length - 1));
         var midproductImageName = arrayProducts[midImage].name;
 
-    } while (leftImage === midImage ||  midImage === rightImage ||  checkAvailability(midproductImageName));
+    } while (leftImage === midImage  || midImage === rightImage ||  checkAvailability(midproductImageName));
 
 
     shownImages = [];
@@ -241,10 +265,8 @@ function pickImage() {
 
     )
 
-    renderMallPicst(leftImage, midImage, rightImage);
+    renderMallPicst(leftImage, midImage, rightImage)
 }
-
-
 
 
 function checkMallPic(objectIndicator) {
@@ -280,14 +302,28 @@ new Product('water-can', 'water-can.jpg');
 new Product('wine-glass', 'wine-glass.jpg');
 
 
-
 pickImage();
+clear.addEventListener('click',clearLocalStorage);
+checkAndRestore();
 
 
+
+
+
+function checkAvailability(selectedProductName) {
+
+    for (var index = 0; index < shownImages.length; index++) {
+        if (shownImages[index].name === selectedProductName) {
+            return true;
+
+        }
+
+    }
+    return false;
+
+}
 
 productSection.addEventListener('click', countImg);
-
-
 
 function countImg(event) {
     var targetId = event.target.id;
@@ -305,7 +341,7 @@ function countImg(event) {
     } else {
         productSection.removeEventListener('click', countImg);
         renderChart();
-
+        storeProducts();
 
 
     }
@@ -324,7 +360,6 @@ function numberShown(objectIndicator) {
 
 
 var results = document.getElementById("results");
-
 
 results.addEventListener("click", function () {
     var ul = document.createElement("ul");

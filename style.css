@@ -1,17 +1,17 @@
 body{
-    background-color: lightblue;
+   background-color: lightblue;
+}
+
+header h2{
+   text-align: center;
+   color: blue;
+}
+
+ section div img {
+   
+   max-width: 98%;
+   height: auto;
+   width: 30%;
+   margin: 1%;
+   float: left;
  }
- 
- header h2{
-    text-align: center;
-    color: blue;
- }
- 
-  section div img {
-    display: inline-block;
-    max-width: 98%;
-    height: auto;
-    width: 30%;
-    margin: 1%;
-    float: left;
-  }
